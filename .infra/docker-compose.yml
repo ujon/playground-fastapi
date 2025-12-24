@@ -1,0 +1,13 @@
+services:
+  postgres:
+    image: postgres:18.1
+    container_name: stradvision-pg
+    restart: always
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - ${VOLUME_PATH}/postgresql:/var/lib/postgresql
