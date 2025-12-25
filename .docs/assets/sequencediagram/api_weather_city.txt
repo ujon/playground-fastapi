@@ -1,0 +1,18 @@
+title GET /weather/:city
+
+participant "USER" as user
+participant "CLIENT_API" as server
+participant "REDIS" as redis
+participant "Open Weather Map" as openweather
+
+user->>server: GET /weather/:city
+server->>redis: [key] weather/city/:city\n[value] string (Weather)
+redis-->>server: [value] Weather | None
+
+alt 캐시 없음
+server->>openweather: POST /data/2.5/weather?q=:city (async)
+openweather-->>server: response
+server->>redis: [key] weather/city/:city\n[value] string (Weather)\n[ttl] 600
+end
+
+server-->>user: Weather

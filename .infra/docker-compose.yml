@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:18.1
-    container_name: stradvision-pg
+    container_name: playground-pg
     restart: always
     ports:
       - "${DB_PORT}:5432"
@@ -11,3 +11,11 @@ services:
       POSTGRES_DB: ${DB_NAME}
     volumes:
       - ${VOLUME_PATH}/postgresql:/var/lib/postgresql
+  redis:
+    image: redis:8.4.0
+    container_name: playground-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ${VOLUME_PATH}/redis:/data

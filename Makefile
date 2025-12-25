@@ -28,9 +28,9 @@ help: ## 도움말
 	@echo "  local (default)"
 
 make-volume: ## Volume mount path 생성 (Podman은 폴더 자동생성 안되어 수동 생성 필요)
-	@mkdir $(VOLUME_PATH)
-	@mkdir $(VOLUME_PATH)/postgresql
-	@mkdir $(VOLUME_PATH)/redis
+	@mkdir -p $(VOLUME_PATH)
+	@mkdir -p $(VOLUME_PATH)/postgresql
+	@mkdir -p $(VOLUME_PATH)/redis
 
 container-up: ## Docker compose 실행
 	@echo "🐳 Starting services with $(CONTAINER_RUNTIME) ($(ENV))...$(ENV_FILE) $(PROJECT)"
@@ -50,3 +50,5 @@ container-clean: ## Docker volume mount 삭제
 	@rm -rf $(VOLUME_PATH)
 	@$(MAKE) make-volume
 
+start:
+	@python3.13 -m client_api.main

@@ -1,0 +1,20 @@
+title POST /weather/batch
+
+participant "USER" as user
+participant "CLIENT_API" as server
+participant "REDIS" as redis
+participant "Open Weather Map" as openweather
+
+user->>server: POST /weather/batch\n[body] cities: string[]
+server->>redis: Transaction\n[key] weather/city/:city\n[value] string (Weather)
+redis-->>server: [value] Weather[]
+
+
+loop 캐시 없는 도시 (async)
+server->>openweather: POST /data/2.5/weather?q=:city
+openweather-->>server: response
+server->>redis: [key] weather/city/:city\n[value] string (Weather)\n[ttl] 600
+end
+
+
+server-->>user: Weather[]
